@@ -1,20 +1,48 @@
+import argparse
 import random
 from datetime import date
 from pathlib import Path
 
-folder = Path(__file__).resolve().parent / "Dane treningowe"
+# folder docelowy
+folder_glowny = Path(__file__).resolve().parent / "Dane treningowe"
+folder_glowny.mkdir(parents=True, exist_ok=True)
+
+#======================================
+# wartości domyślne lub przekazane z C++
+wariant_koloru = 0
+ilosc_kopii = 10
+width, height = 160, 120
+progress = 0
+#======================================
+
+parser = argparse.ArgumentParser(description="Generator danych obrazów AI")
+parser.add_argument("wariant_koloru", nargs="?", type=int, default=wariant_koloru, help="Wariant koloru")
+parser.add_argument("ilosc_kopii", nargs="?", type=int, default=ilosc_kopii, help="Ilość kopii do wygenerowania")
+parser.add_argument("width", nargs="?", type=int, default=width, help="Szerokość obrazu")
+parser.add_argument("height", nargs="?", type=int, default=height, help="Wysokość obrazu")
+parser.add_argument("folder_name", nargs="?", type=str, default=None, help="Nazwa folderu")
+args = parser.parse_args()
+
+wariant_koloru = args.wariant_koloru
+ilosc_kopii = args.ilosc_kopii
+width = args.width
+height = args.height
+folder_name = args.folder_name if args.folder_name else f"{date.today().year}-{date.today().month}-{date.today().day}"
+folder = folder_glowny / folder_name
 folder.mkdir(parents=True, exist_ok=True)
 
-for i in range(1, 10):
-    nazwa_pliku = f"{date.today().year}-{date.today().month}-{date.today().day}_plik-{i}.pgm"
 
-    width, height = 160, 120
-    prob = 0.05
-    ilosc_linii = 10
-    kierunek = 1 
-    thickness = 3  # Grubość linii
+#======================
 
-    # Tworzymy obraz w pamięci
+prob = 0.05
+thickness = 3
+
+for plik_nr in range(1, ilosc_kopii + 1):
+
+    ilosc_linii = random.randint(1, 10)
+    nazwa_pliku = f"{plik_nr}-{ilosc_linii}-{date.today().year}-{date.today().month}-{date.today().day}_plik-{plik_nr}.pgm"
+
+    # --- obraz w pamięci ---
     image = []
     for y in range(height):
         row = []
@@ -25,8 +53,8 @@ for i in range(1, 10):
                 row.append("255")
         image.append(row)
 
-    # Funkcja do rysowania grubych linii
-    def draw_line(x, y, thickness):
+    # --- rysowanie grubych pikseli ---
+    def draw_line(x, y):
         half = thickness // 2
         for dy in range(-half, half + 1):
             for dx in range(-half, half + 1):
@@ -35,68 +63,54 @@ for i in range(1, 10):
                 if 0 <= ny < height and 0 <= nx < width:
                     image[ny][nx] = "0"
 
-    # Rysowanie linii 
+    # --- rysowanie linii ---
     for _ in range(ilosc_linii):
-
         kierunek = random.randint(1, 8)
-        x = random.randint(0, width-1)
-        y = random.randint(0, height-1)
+        x = random.randint(0, width - 1)
+        y = random.randint(0, height - 1)
         dlugosc = random.randint(20, 50)
-    
-        if kierunek == 1: # GÓRA
-            for i in range(dlugosc):
-                if y - i >= 0:
-                    draw_line(x, y - i, thickness)
-        if kierunek == 2: # GÓRA-PRAWO
-                for i in range(dlugosc):
-                    if y - i >= 0 and x + i < width:
-                        draw_line(x + i, y - i, thickness)
-        if kierunek == 3: # PRAWO
-                for i in range(dlugosc):
-                    if x + i < width:
-                        draw_line(x + i, y, thickness)
-        if kierunek == 4: # PRAWO-DÓŁ
-                for i in range(dlugosc):
-                    if y + i < height and x + i < width:
-                        draw_line(x + i, y + i, thickness)
-        if kierunek == 5: # DOŁ
-                for i in range(dlugosc):
-                    if y + i < height:
-                        draw_line(x, y + i, thickness)
-        if kierunek == 6: # DÓŁ-LEWO
-                for i in range(dlugosc):
-                    if y + i < height and x - i >= 0:
-                        draw_line(x - i, y + i, thickness)
-        if kierunek == 7: # LEWO
-                for i in range(dlugosc):
-                    if x - i >= 0:
-                        draw_line(x - i, y, thickness)
-        if kierunek == 8: # LEWO-GÓRA
-                for i in range(dlugosc):
-                    if y - i >= 0 and x - i >= 0:
-                        draw_line(x - i, y - i, thickness)
 
+        for j in range(dlugosc):
 
-    prob = 0.05
-    image = []
+            if kierunek == 1 and y - j >= 0:  # góra
+                draw_line(x, y - j)
+
+            elif kierunek == 2 and y - j >= 0 and x + j < width:  # góra-prawo
+                draw_line(x + j, y - j)
+
+            elif kierunek == 3 and x + j < width:  # prawo
+                draw_line(x + j, y)
+
+            elif kierunek == 4 and y + j < height and x + j < width:  # dół-prawo
+                draw_line(x + j, y + j)
+
+            elif kierunek == 5 and y + j < height:  # dół
+                draw_line(x, y + j)
+
+            elif kierunek == 6 and y + j < height and x - j >= 0:  # dół-lewo
+                draw_line(x - j, y + j)
+
+            elif kierunek == 7 and x - j >= 0:  # lewo
+                draw_line(x - j, y)
+
+            elif kierunek == 8 and y - j >= 0 and x - j >= 0:  # góra-lewo
+                draw_line(x - j, y - j)
+
+    # --- obraz w pamięci ---
     for y in range(height):
-        row = []
         for x in range(width):
-            if random.random() < prob:
-                row.append("1")
-            else:
-                row.append("255")
-        image.append(row)
+            if image[y][x] != "1":  # nie ruszaj linii
+                if random.random() < prob:
+                    image[y][x] = "255"
 
-
-
-    # Zapisywanie pliku PGM
+                    
+    # --- zapis ---
     file_path = folder / nazwa_pliku
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         f.write("P2\n")
         f.write(f"{width} {height}\n")
         f.write("255\n")
         for row in image:
             f.write(" ".join(row) + "\n")
-    
+
     print(f"Zapisano: {file_path}")
