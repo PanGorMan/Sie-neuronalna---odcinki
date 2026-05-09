@@ -1,0 +1,6 @@
+Nazwa Pakietu: dane_1
+data utworzenia : 160
+ilosc kopii: 1000
+width: 160
+height: 120
+wariant_koloru: 0
