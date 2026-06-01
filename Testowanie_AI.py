@@ -58,6 +58,12 @@ for x in dane[4:]:
 
 X = np.array([input_data], dtype=np.float32)
 
+X = 1 - X
+
+X = X.reshape(-1, 120, 160, 1)
+
+print(X.shape)
+
 # ==========================
 # Predykcja
 # ==========================
@@ -69,7 +75,7 @@ odpowiedz = np.argmax(wynik)
 print("\n======================")
 print("WYNIK AI")
 print("======================")
-print("AI uważa że na obrazie jest:", odpowiedz, "linii")
+print("AI uważa że na obrazie jest:", odpowiedz + 1, "linii")
 print("======================")
 print("Surowy wynik:")
 print(wynik[0])

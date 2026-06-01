@@ -99,7 +99,7 @@ for plik_nr in range(1, ilosc_kopii + 1):
     # --- obraz w pamięci ---
     for y in range(height):
         for x in range(width):
-            if image[y][x] != "1":  # nie ruszaj linii
+            if image[y][x] != "0":  # nie ruszaj linii
                 if random.random() < prob:
                     image[y][x] = "255"
 
