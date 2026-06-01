@@ -1,6 +1,0 @@
-Nazwa Pakietu: dane2
-data utworzenia : 320
-ilosc kopii: 1000
-width: 320
-height: 240
-wariant_koloru: 0
