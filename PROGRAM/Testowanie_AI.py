@@ -1,5 +1,4 @@
 import sys
-
 print(sys.executable)
 
 
@@ -9,9 +8,32 @@ from pathlib import Path
 
 print ("\n\nTESTOWANIE AI \n\n")
 
+folder_modeli = Path("Gotowe_AI")
 
-model = tf.keras.models.load_model("Gotowe_AI/model.keras")
+modele = []
 
+for plik in folder_modeli.iterdir():
+    if plik.suffix == ".keras":
+        modele.append(plik)
+
+if len(modele) == 0:
+    print("Brak modeli w folderze Gotowe_AI")
+    exit()
+
+print("\nDostępne modele:")
+
+for i, model in enumerate(modele):
+    print(f"[{i+1}] {model.name}")
+
+wybor = int(input("\nWybierz model: "))
+
+wybrany_model = modele[wybor - 1]
+
+print("Załadowano:", wybrany_model.name)
+
+
+
+model = tf.keras.models.load_model(wybrany_model)
 
 folder_testowy = Path("Plik do testów")
 
@@ -31,11 +53,15 @@ if len(pliki_pgm) > 1:
 
 plik_testowy = pliki_pgm[0]
 
+nazwa = plik_testowy.stem
+
+parts = nazwa.split("-")
+
+faktyczna_liczba_linii = int(parts[1])
+
 print("Testowany plik:", plik_testowy.name)
 
-# ==========================
 # Wczytanie obrazu
-# ==========================
 
 with open(plik_testowy, "r") as plik:
     dane = plik.read().split()
@@ -52,9 +78,7 @@ for x in dane[4:]:
     else:
         input_data.append(0)
 
-# ==========================
 # Przygotowanie danych
-# ==========================
 
 X = np.array([input_data], dtype=np.float32)
 
@@ -64,9 +88,7 @@ X = X.reshape(-1, 120, 160, 1)
 
 print(X.shape)
 
-# ==========================
 # Predykcja
-# ==========================
 
 wynik = model.predict(X)
 
@@ -77,5 +99,4 @@ print("WYNIK AI")
 print("======================")
 print("AI uważa że na obrazie jest:", odpowiedz + 1, "linii")
 print("======================")
-print("Surowy wynik:")
-print(wynik[0])
+print("Faktyczna liczba linii:", faktyczna_liczba_linii)

@@ -17,16 +17,15 @@ int main() {
     SetConsoleCP(65001);
 
     int wybór ;
-    int progress = 0; // wartość dla wizualizacj
+    int progress = 0;
     int wszystkie_pliki = 0;
-    int wariant_koloru = 0;
     int ilosc_kopii = 1000;
     int width = 160;
     int height = 120;
     string folder_name;
     string sciezka ;
 
-    cout << "\n--- WIELKA MASZYNA AI ---\n\n[1] generowanie obrazów AI\n[2] przegląd plików\n[3] Uczenie AI\n[4] Testowanie AI\n[5] Reset\n[6] Wyjście\n";
+    cout << "\n--- Sieć neuronowa zliczająca ilość odcinków na obrazie ---\n\n[1] generowanie obrazów\n[2] przegląd plików\n[3] Uczenie AI\n[4] Testowanie AI\n[5] Reset\n[6] Wyjście\n";
 
     cin >> wybór;
     if (wybór == 1) {
@@ -34,25 +33,15 @@ int main() {
 
         while (true){
         if (wybór == 1){
-        cout << "Wariant koloru (1 - czarno-białe 2 - kolorowe):\n ";
-        cin >> wariant_koloru;
-        if(wariant_koloru == 1){
-            cout << "\nWybrano-biały wariant\n "; wybór++ ;
-        }else if(wariant_koloru == 2){
-            cout << "\nWybrano-biały wariant (bo na kolorowym jeszcze nie operujemy)\n "; wybór++ ;
-        }else{
-            cout << "\nNie prawidłowa odpowiedź\n ";
-        }}
-        if (wybór == 2){
-        cout << "Ilość kopii (min 1000 , max 10000): \n";
+        cout << "Ilość kopii (min 1000 , max 20000): \n";
         cin >> ilosc_kopii;
         if(ilosc_kopii <= 999){
             cout << "\nZa mała liczba kopii - AI potrzebuje więcej danych\n ";
-        }else if(ilosc_kopii > 10000){
+        }else if(ilosc_kopii > 20000){
             cout << "\nZa duża liczba kopii - Liczba przewyższa zakres\n ";
         }else { wybór++ ;
         }}
-        if (wybór == 3){
+        if (wybór == 2){
         cout << "Szerokość obrazu : 1 - 640x480, 2 - 320x240 ,3 - 160x120\n";
         cin >> width;
 
@@ -66,7 +55,7 @@ int main() {
             cout << "\nNieprawidłowy wybór rozdzielczości\n ";
         }}
 
-        if (wybór == 4){
+        if (wybór == 3){
         cout << "jak nazwać folder z zestawem danych ? (np. 'DANE1')\n"; // sprawdzenie czy już taki folder istnieje
         cin >> folder_name;
         string sciezka = "Dane treningowe/" + folder_name;
@@ -78,7 +67,7 @@ int main() {
             wybór++;
         }}
 
-        if (wybór == 5){
+        if (wybór == 4){
         cout << "czy wygenerować obraz ? (1 - tak, 0 - nie)\n";
         cin >> wybór;
         if (wybór == 0){
@@ -86,18 +75,17 @@ int main() {
         }
         else if (wybór == 1) {
 
-            string command = "py \"Generator_danych.py\" " + to_string(wariant_koloru) + " " + to_string(ilosc_kopii) + " " + to_string(width) + " " + to_string(height) + " \"" + folder_name + "\"";
+            string command = "py \"Generator_danych.py\" "  + to_string(ilosc_kopii) + " " + to_string(width) + " " + to_string(height) + " \"" + folder_name + "\"";
             system(command.c_str());
             
             string path = "Dane treningowe/" + folder_name + "/DANE " + folder_name + ".txt";
             ofstream plik(path);
 
             plik << "Nazwa Pakietu: " << folder_name << "\n";
-            plik << "data utworzenia : " << width << "\n";
             plik << "ilosc kopii: " << ilosc_kopii << "\n";
             plik << "width: " << width << "\n";
             plik << "height: " << height << "\n";
-            plik << "wariant_koloru: " << wariant_koloru << "\n";
+            plik << "height: " << height << "\n";
 
             cout << "\n Tworzenie danych zakończone sukcesem.\n";break;
 
@@ -205,8 +193,8 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
 
             progress++;
 
-            if (progress % 10 == 0) { // aktualizacja wizualizacji co 10 plików
-                cout << "\rProgress: " << progress << " files copied";
+            if (progress % 10 == 0) { 
+                cout << "\Skopiowano: " << progress ;
                 cout.flush();
             }
 
@@ -225,7 +213,7 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
     }
 }
     progress = 0; 
-    cout << "  Gotowe\n";
+    cout << "  \nGotowe\n";
     cout << "Naprawianie pliku...\n";
 
     //---------------------
@@ -334,21 +322,18 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
 
         zapis.close();
 
-        
             progress++;
-
+            
             if (progress % 10 == 0) { // aktualizacja wizualizacji co 10 plików
-                cout << "\rProgress: " << progress << " files naprawione";
+                cout << "\Naprawiono: " << progress;
                 cout.flush();
             }
-        
-
 
     }
 
-    cout << "  Gotowe\n";
+    cout << "  \nGotowe\n";
     
-    cout << "Trenowanie AI...\n";
+    cout << \n"Trenowanie AI...\n";
 
     vector<vector<int>> dataset_X;
     vector<int> dataset_Y;
@@ -437,8 +422,14 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
 
         csv << "\n";
 
-        cout << "Dodano obraz: " << filename << "\n";
+        progress++;
+
+        cout << "\rDodano do datasetu: "
+            << progress
+            << " obrazow";
+        cout.flush();
     }
+        cout << "\n";
 
     // zamknięcie pliku CSV
     csv.close();
@@ -447,6 +438,8 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
     cout << "Gotowy dataset AI\n";
 
     cout << "Liczba probek: " << dataset_X.size() << "\n";
+
+    cout << "\n Aktywacja Uczenie_AI.py - proszę chwilę czekać \n" ;
 
     system("python Uczenie_AI.py");
 
@@ -458,15 +451,24 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
 
     } 
     else if (wybór == 5) {
-
+    
+    cout << "\n!!! Uwaga usuwanie plików jest permanentne i nie będzie można ich przywrócić !!!\n\n Czy chcesz usunąć Dane treningowe 1 - tak , 0 - nie\n" ;
+    cin >> wybór ;
+    if (wybór == 1){
     sciezka = "Dane treningowe";
     if (fs::exists(sciezka)) {
     for (const auto& entry : fs::directory_iterator(sciezka)) {
         fs::remove_all(entry.path());
     }
-    cout << "Dane treningowe wykasowane\n";
+    cout << "\nDane treningowe wykasowane\n";
+    } 
     }
-        sciezka = "Folder operacyjny/Dataset";
+
+    cout << "\n Czy chcesz usunąć Dane treningowe ? 1 - tak , 0 - nie\n\n" ;
+    cin >> wybór ;
+
+    if (wybór == 1){
+    sciezka = "Folder operacyjny/Dataset";
     if (fs::exists(sciezka)) {
     for (const auto& entry : fs::directory_iterator(sciezka)) {
         fs::remove_all(entry.path());
@@ -478,15 +480,18 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
         fs::remove_all(entry.path());
     }
     cout << "Folder operacykny wykasowany\n";
-    }
+    }}
+    cout << "\n Czy chcesz usunąć folder z Gotowe_AI ? 1 - tak , 0 - nie\n\n" ;
+    cin >> wybór ;
+
+    if (wybór == 1){
     sciezka = "Gotowe_AI";
     if (fs::exists(sciezka)) {
     for (const auto& entry : fs::directory_iterator(sciezka)) {
         fs::remove_all(entry.path());
     }
     cout << "Pliki z AI usunięte\n";
-    }
-
+    }}
 
     }
 
@@ -494,7 +499,7 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
         break;
     }
      else {
-        cout << "Nieprawidłowy wybór. Proszę wybrać opcję od 1 do 5.\n";
+        cout << "Nieprawidłowy wybór. Proszę wybrać opcję od 1 do 5.\n\n";
     }
 
 

@@ -9,21 +9,18 @@ folder_glowny.mkdir(parents=True, exist_ok=True)
 
 #======================================
 # wartości domyślne lub przekazane z C++
-wariant_koloru = 0
 ilosc_kopii = 10
 width, height = 160, 120
 progress = 0
 #======================================
 
 parser = argparse.ArgumentParser(description="Generator danych obrazów AI")
-parser.add_argument("wariant_koloru", nargs="?", type=int, default=wariant_koloru, help="Wariant koloru")
 parser.add_argument("ilosc_kopii", nargs="?", type=int, default=ilosc_kopii, help="Ilość kopii do wygenerowania")
 parser.add_argument("width", nargs="?", type=int, default=width, help="Szerokość obrazu")
 parser.add_argument("height", nargs="?", type=int, default=height, help="Wysokość obrazu")
 parser.add_argument("folder_name", nargs="?", type=str, default=None, help="Nazwa folderu")
 args = parser.parse_args()
 
-wariant_koloru = args.wariant_koloru
 ilosc_kopii = args.ilosc_kopii
 width = args.width
 height = args.height
@@ -113,4 +110,7 @@ for plik_nr in range(1, ilosc_kopii + 1):
         for row in image:
             f.write(" ".join(row) + "\n")
 
-    print(f"Zapisano: {file_path}")
+    progress += 1
+
+    if progress % 10 == 0:
+        print(f"\rWygenerowano: {progress}/{ilosc_kopii} obrazów", end="", flush=True)
