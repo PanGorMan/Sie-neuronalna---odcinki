@@ -42,30 +42,14 @@ int main() {
         }else { wybór++ ;
         }}
         if (wybór == 2){
-        cout << "Szerokość obrazu : 1 - 640x480, 2 - 320x240 ,3 - 160x120\n";
-        cin >> width;
 
-        if(width == 1){
-            cout << "\nWybrano-biały wariant 640x480\n ";width = 640; height = 480; wybór++ ;
-        }else if(width == 2){
-            cout << "\nWybrano-biały wariant 320x240\n ";width = 320; height = 240; wybór++ ;
-        }else if(width == 3){
-            cout << "\nWybrano-biały wariant 160x120\n "; width = 160; height = 120;wybór++ ;
-        }else{
-            cout << "\nNieprawidłowy wybór rozdzielczości\n ";
-        }}
+            width = 160;
+            height = 120;
 
-        if (wybór == 3){
-        cout << "jak nazwać folder z zestawem danych ? (np. 'DANE1')\n"; // sprawdzenie czy już taki folder istnieje
-        cin >> folder_name;
-        string sciezka = "Dane treningowe/" + folder_name;
-                if (fs::exists(sciezka)) {
-            cout << "ERROR -- taki folder juz istnieje!\n\n";
-        }
-        else {
-            cout << "Nazwa zaakceptowana\n";
+            cout << "Uzywana rozdzielczosc: 160x120\n";
+
             wybór++;
-        }}
+        }
 
         if (wybór == 4){
         cout << "czy wygenerować obraz ? (1 - tak, 0 - nie)\n";
@@ -84,7 +68,6 @@ int main() {
             plik << "Nazwa Pakietu: " << folder_name << "\n";
             plik << "ilosc kopii: " << ilosc_kopii << "\n";
             plik << "width: " << width << "\n";
-            plik << "height: " << height << "\n";
             plik << "height: " << height << "\n";
 
             cout << "\n Tworzenie danych zakończone sukcesem.\n";break;
@@ -194,7 +177,7 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
             progress++;
 
             if (progress % 10 == 0) { 
-                cout << "\Skopiowano: " << progress ;
+                cout << "\n Skopiowano: " << progress ;
                 cout.flush();
             }
 
@@ -325,7 +308,7 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
             progress++;
             
             if (progress % 10 == 0) { // aktualizacja wizualizacji co 10 plików
-                cout << "\Naprawiono: " << progress;
+                cout << "\n Naprawiono: " << progress;
                 cout.flush();
             }
 
@@ -333,7 +316,9 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
 
     cout << "  \nGotowe\n";
     
-    cout << \n"Trenowanie AI...\n";
+    cout << "\nTrenowanie AI...\n";
+
+    progress = 0;
 
     vector<vector<int>> dataset_X;
     vector<int> dataset_Y;
@@ -464,7 +449,7 @@ for (const auto& entry : filesystem::directory_iterator(source_path)) {
     } 
     }
 
-    cout << "\n Czy chcesz usunąć Dane treningowe ? 1 - tak , 0 - nie\n\n" ;
+    cout << "\n Czy chcesz usunąć Folder operacyjny ? 1 - tak , 0 - nie\n\n" ;
     cin >> wybór ;
 
     if (wybór == 1){

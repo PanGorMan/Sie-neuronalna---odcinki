@@ -1,0 +1,97 @@
+Sieć neuronowa zliczająca ilość odcinków na obrazie
+
+	Projekt zaliczeniowy wykorzystujący sztuczną inteligencję do rozpoznawania liczby linii znajdujących się na obrazie. Program automatycznie generuje dane treningowe, tworzy 	zbiór danych, uczy model sieci neuronowej oraz umożliwia jego testowanie.
+
+ Funkcjonalności
+
+	* Wczytuje i przetwarza obrazy o rozdzielczości 640x480, 320x240 oraz 160x120
+	* Trenuje sieć neuronową na podstawie wygenerowanych danych
+	* Rozpoznaje i zlicza odcinki znajdujące się na obrazie
+	* Filtruje wcześniej nałożony szum
+	* Wyświetla wyniki z odpowiednią precyzją
+	* W przeprowadzonych testach uzyskano skuteczność przekraczającą 90%
+	* Jest kompatybilny z systemami Windows 10 oraz Windows 11
+	* Posiada czytelny interfejs użytkownika, który prowadzi przez wszystkie etapy pracy programu
+
+ Zawartość folderu „PROGRAM”
+
+	PROGRAM
+	├── Dane treningowe
+	├── Folder operacyjny
+	│   ├── Dataset
+	│   └── Obrazy
+	├── Gotowe_AI
+	├── Plik do testów
+	├── Aktywator.cpp
+	├── Aktywator.exe
+	├── Generator_danych.py
+	├── Testowanie_AI.py
+	└── Uczenie_AI.py
+
+
+Struktura projektu
+
+	Aktywator.cpp
+	├── Generator_danych.py
+	│       └── generowanie obrazów treningowych
+	├── Uczenie_AI.py
+	│       ├── tworzenie dataset.csv
+	│       ├── uczenie modelu
+	│       └── zapis modelu .keras
+	└── Testowanie_AI.py
+			├── wczytanie modelu
+			└── analiza obrazu
+
+Wymagane systemy
+
+	* Windows 10 lub Windows 11
+	* Python 3.11
+
+	Wymagane biblioteki (dla Python 3.11)
+
+	* TensorFlow
+	* NumPy
+
+Instrukcja instalacji bibliotek
+
+	1. Pobranie Pythona
+
+	Pobierz i zainstaluj Python 3.11:
+
+	https://www.python.org/downloads/
+
+	2. Instalacja bibliotek
+
+	Otwórz PowerShell i wykonaj następujące polecenia:
+
+	pip install tensorflow
+	pip install numpy
+	
+	3. Konfiguracja Visual Studio Code
+
+	Zainstaluj następujące rozszerzenia:
+
+	* Python
+	* Pylance
+	* Python Debugger
+	* Python Environments
+
+	Następnie wybierz interpreter Python 3.11:
+
+	Ctrl + Shift + P
+	Python: Select Interpreter
+	
+
+	W przypadku problemów zaleca się zapoznanie z plikiem `Dokumentacja.md`, gdzie w sekcji **„3. Instrukcja instalacji oraz korzystania z programu”** proces ten został opisany bardziej szczegółowo.
+
+Uruchomienie
+
+	Aby uruchomić program, należy włączyć plik `Aktywator.exe` lub otworzyć projekt w Visual Studio Code i uruchomić plik `Aktywator.cpp`.
+
+	Program nie wymaga instalacji. Po pobraniu oraz skonfigurowaniu wymaganych bibliotek jest gotowy do użycia.
+
+Autor
+
+	Autorem oprogramowania jest Michał Benio.
+
+	Projekt został wykonany w ramach zajęć z programowania oraz sztucznej inteligencji.

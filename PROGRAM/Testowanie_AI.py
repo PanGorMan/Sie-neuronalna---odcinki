@@ -39,6 +39,8 @@ folder_testowy = Path("Plik do testów")
 
 pliki_pgm = []
 
+print("Szukam w:", folder_testowy.resolve())
+
 for plik in folder_testowy.iterdir():
     if plik.suffix.lower() == ".pgm":
         pliki_pgm.append(plik)
@@ -84,7 +86,7 @@ X = np.array([input_data], dtype=np.float32)
 
 X = 1 - X
 
-X = X.reshape(-1, 120, 160, 1)
+X = X.reshape(-1, height, width, 1)
 
 print(X.shape)
 

@@ -31,7 +31,7 @@ folder.mkdir(parents=True, exist_ok=True)
 
 #======================
 
-prob = 0.05
+prob = 0.02
 thickness = 3
 
 for plik_nr in range(1, ilosc_kopii + 1):
